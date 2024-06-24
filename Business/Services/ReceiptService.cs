@@ -50,7 +50,7 @@ namespace Business.Services
             if(receipt.ReceiptDetails.Any(rd => rd.ProductId == productId))
             {
                 var rd = receipt.ReceiptDetails.SingleOrDefault(rd => rd.ProductId == productId);
-                rd.Quantity += quantity;
+                rd!.Quantity += quantity;
                 await _unitOfWork.SaveAsync();
                 return;
             }
@@ -156,7 +156,7 @@ namespace Business.Services
         public async Task<IEnumerable<ReceiptDetailModel>> GetReceiptDetailsAsync(int receiptId)
         {
             var receipts = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId);
-            //var receipt = receipts.FirstOrDefault();
+
             if (receipts == null)
             {
                 throw new MarketException($"Receipt with ID {receiptId} not found.");
@@ -224,11 +224,11 @@ namespace Business.Services
 
         public async Task UpdateAsync(ReceiptModel model)
         {
-            {
+            
                 var receipt = _mapper.Map<Receipt>(model);
                 _unitOfWork.ReceiptRepository.Update(receipt);
                 await _unitOfWork.SaveAsync();
-            }
+            
         }
     }
 }

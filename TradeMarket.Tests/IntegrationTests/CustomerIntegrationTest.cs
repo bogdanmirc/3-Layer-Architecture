@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace TradeMarket.Tests.IntegrationTests
 {
-    public class CustomerIntegrationTest
+    public class CustomerIntegrationTest 
     {
         private CustomWebApplicationFactory _factory;
         private HttpClient _client;
@@ -104,8 +104,8 @@ namespace TradeMarket.Tests.IntegrationTests
                 Id = 3,
                 Name = "Desmond",
                 Surname = "Morris",
-                BirthDate = new DateTime(1955, 4, 12),
-                DiscountValue = 5
+                BirthDate = new DateTime(1955, 4, 12, 0, 0, 0, DateTimeKind.Utc),
+				DiscountValue = 5
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json");
@@ -124,7 +124,7 @@ namespace TradeMarket.Tests.IntegrationTests
         public async Task CustomersControllerAddThrowsExceptionIfModelIsInvalid()
         {
             // name is empty
-            var customer = new CustomerModel { Name = string.Empty, Surname = "Haskell", BirthDate = new DateTime(1962, 4, 12), DiscountValue = 50 };
+            var customer = new CustomerModel { Name = string.Empty, Surname = "Haskell", BirthDate = new DateTime(1962, 4, 12, 0, 0, 0, DateTimeKind.Utc), DiscountValue = 50 };
             await CheckExceptionWhileAddNewModel(customer);
 
             // surname is empty
@@ -134,11 +134,11 @@ namespace TradeMarket.Tests.IntegrationTests
 
             // birthdate is not valid 
             customer.Surname = "Hamilton";
-            customer.BirthDate = new DateTime(2050, 12, 1);
+            customer.BirthDate = new DateTime(2050, 12, 1, 0, 0, 0, DateTimeKind.Utc);
             await CheckExceptionWhileAddNewModel(customer);
 
             //discount value is not valid
-            customer.BirthDate = new DateTime(2000, 12, 31);
+            customer.BirthDate = new DateTime(2000, 12, 31, 0, 0, 0, DateTimeKind.Utc);
             customer.DiscountValue = -10;
             await CheckExceptionWhileAddNewModel(customer);
         }
@@ -151,7 +151,7 @@ namespace TradeMarket.Tests.IntegrationTests
                 Id = 1,
                 Name = "NewName1",
                 Surname = "NewSurname1",
-                BirthDate = new DateTime(1980, 5, 25),
+                BirthDate = new DateTime(1980, 5, 25, 0, 0, 0, DateTimeKind.Utc),
                 DiscountValue = 50,
             };
             var content = new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json");
@@ -169,7 +169,7 @@ namespace TradeMarket.Tests.IntegrationTests
         public async Task CustomersControllerUpdateThrowsExceptionIfModelIsInvalid()
         {
             //name is empty
-            var customer = new CustomerModel { Id = 1, Name = "", Surname = "NewSurname1", BirthDate = new DateTime(1980, 5, 25), DiscountValue = 20 };
+            var customer = new CustomerModel { Id = 1, Name = "", Surname = "NewSurname1", BirthDate = new DateTime(1980, 5, 25, 0, 0, 0, DateTimeKind.Utc), DiscountValue = 20 };
             await CheckExceptionWhileUpdateModel(customer);
 
             //surname is empty
@@ -179,11 +179,11 @@ namespace TradeMarket.Tests.IntegrationTests
 
             //birthdate is invalid
             customer.Surname = "Durname";
-            customer.BirthDate = new DateTime(1469, 2, 2);
+            customer.BirthDate = new DateTime(1469, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             await CheckExceptionWhileAddNewModel(customer);
 
             //discount value is not valid
-            customer.BirthDate = new DateTime(2000, 12, 31);
+            customer.BirthDate = new DateTime(2000, 12, 31, 0, 0, 0, DateTimeKind.Utc);
             customer.DiscountValue = -1;
             await CheckExceptionWhileUpdateModel(customer);
         }
@@ -212,12 +212,12 @@ namespace TradeMarket.Tests.IntegrationTests
             {
                 new CustomerModel
                 {
-                    Id = 1, Name = "Han", Surname = "Solo", BirthDate = new DateTime(1942, 7, 13),
+                    Id = 1, Name = "Han", Surname = "Solo", BirthDate = new DateTime(1942, 7, 13, 0, 0, 0, DateTimeKind.Utc),
                     DiscountValue = 20, ReceiptsIds = new List<int>() {1, 2}
                 },
                 new CustomerModel
                 {
-                    Id = 2, Name = "Ethan", Surname = "Hunt", BirthDate = new DateTime(1964, 8, 18),
+                    Id = 2, Name = "Ethan", Surname = "Hunt", BirthDate = new DateTime(1964, 8, 18, 0, 0, 0, DateTimeKind.Utc),
                     DiscountValue = 10, ReceiptsIds = new List<int>() { 3 }
                 },
             };

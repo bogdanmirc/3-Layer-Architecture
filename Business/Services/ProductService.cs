@@ -25,8 +25,10 @@ namespace Business.Services
         }
 
 
+
         public async Task AddAsync(ProductModel model)
         {
+
             if (model == null)
             {
                 throw new MarketException("Product model cannot be null.");
@@ -42,10 +44,12 @@ namespace Business.Services
                 throw new MarketException("Product price cannot be negative.");
             }
 
+
             var product = _mapper.Map<Product>(model);
             await _unitOfWork.ProductRepository.AddAsync(product);
             await _unitOfWork.SaveAsync();
         }
+
 
 
 
@@ -64,11 +68,16 @@ namespace Business.Services
             await _unitOfWork.SaveAsync();
         }
 
+
+
+
         public async Task DeleteAsync(int modelId)
         {
             await _unitOfWork.ProductRepository.DeleteByIdAsync(modelId);
             await _unitOfWork.SaveAsync();
         }
+
+
 
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()

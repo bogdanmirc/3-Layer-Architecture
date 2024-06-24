@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
+
 namespace WebApi
 {
     public class Startup
@@ -28,9 +29,12 @@ namespace WebApi
             services.AddControllers();
 
             // Add AutoMapper services
-            services.AddAutoMapper(typeof(Startup));
-
-            services.AddDbContext<TradeMarketDbContext>(options =>
+            services.AddAutoMapper(typeof(Program).Assembly);
+			var config = new MapperConfiguration(cfg => {
+				cfg.AddProfile<AutomapperProfile>();
+			});
+            config.CompileMappings();
+			services.AddDbContext<TradeMarketDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Market")));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -71,7 +75,7 @@ namespace WebApi
                 endpoints.MapControllers();
             });
 
-			mapper.ConfigurationProvider.AssertConfigurationIsValid();
-		}
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
+        }
     }
 }

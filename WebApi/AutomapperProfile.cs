@@ -3,7 +3,7 @@ using Business.Models;
 using Data.Entities;
 using System.Linq;
 
-namespace Business
+namespace WebApi
 {
     public class AutomapperProfile : Profile
     {

@@ -50,22 +50,47 @@ namespace WebApi.Controllers
 
         // POST: api/customers
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CustomerModel value)
+        public async Task<ActionResult> Post([FromBody] CustomerDTO value)
         {
-            await _customerService.AddAsync(value);
+            if(value == null || string.IsNullOrEmpty(value.Name) || string.IsNullOrEmpty(value.Surname) || value.BirthDate >= DateTime.Now || value.DiscountValue < 0 || value.BirthDate <= new DateTime(1900, 1, 1, 1, 1, 1, DateTimeKind.Utc))
+            {
+                return BadRequest();
+            }
+            var customerModel = new CustomerModel
+            {
+                Id = value.Id,
+                Name = value.Name,
+                BirthDate = value.BirthDate,
+                Surname = value.Surname,
+                DiscountValue = value.DiscountValue,
+            };
+            await _customerService.AddAsync(customerModel);
             return CreatedAtAction(nameof(GetById), new { id = value.Id }, value);
         }
 
         // PUT: api/customers/1
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int Id, [FromBody] CustomerModel value)
+        public async Task<ActionResult> Put(int Id, [FromBody] CustomerDTO value)
         {
-            if (Id != value.Id)
+			if (value == null || string.IsNullOrEmpty(value.Name) || string.IsNullOrEmpty(value.Surname) || value.BirthDate >= DateTime.Now || value.DiscountValue < 0|| value.BirthDate <= new DateTime(1900, 1, 1, 1, 1, 1, DateTimeKind.Utc))
+			{
+				return BadRequest();
+			}
+			if (Id != value.Id)
             {
                 return BadRequest();
             }
 
-            await _customerService.UpdateAsync(value);
+			var customerModel = new CustomerModel
+			{
+				Id = value.Id,
+				Name = value.Name,
+				BirthDate = value.BirthDate,
+				Surname = value.Surname,
+				DiscountValue = value.DiscountValue,
+			};
+
+			await _customerService.UpdateAsync(customerModel);
             return NoContent();
         }
 
@@ -77,4 +102,13 @@ namespace WebApi.Controllers
             return NoContent();
         }
     }
+    public class CustomerDTO
+    {
+		public int Id { get; set; }
+		public string? Name { get; set; }
+		public string? Surname { get; set; }
+		public DateTime BirthDate { get; set; }
+		public int DiscountValue { get; set; }
+
+	}
 }

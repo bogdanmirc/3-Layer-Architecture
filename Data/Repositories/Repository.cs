@@ -26,7 +26,7 @@ namespace Data.Repositories
             
             var x = await _dbSet.ToListAsync();
             return x;
-        }
+       }
 
         public async Task<TEntity> GetByIdAsync(int id)
         {

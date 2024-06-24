@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+
 
 #nullable disable
 
@@ -13,7 +15,7 @@ namespace Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
-        }
+			throw new NotSupportedException("This migration cannot be reversed.");
+		}
     }
 }

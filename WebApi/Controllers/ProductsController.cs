@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Business.Interfaces;
 using Business.Models;
 using Business.Validation;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace WebApi.Controllers
 {
@@ -47,9 +49,21 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] ProductModel value)
+        public async Task<ActionResult> Post([FromBody] ProductDTO value)
         {
-            await _productService.AddAsync(value);
+			if (value == null || string.IsNullOrEmpty(value.CategoryName))
+			{
+				return BadRequest();
+			}
+            var productModel = new ProductModel
+            {
+                Id= value.Id,
+                CategoryName= value.CategoryName,
+                Price= value.Price,
+                ProductCategoryId=value.ProductCategoryId,
+                ProductName= value.ProductName,
+            };
+			await _productService.AddAsync(productModel);
             return CreatedAtAction(nameof(GetById), new { id = value.Id }, value);
         }
 
@@ -97,5 +111,16 @@ namespace WebApi.Controllers
             await _productService.RemoveCategoryAsync(id);
             return NoContent();
         }
-    }
+
+
+		public class ProductDTO
+		{
+			public int Id { get; set; }
+			public int ProductCategoryId { get; set; }
+			public string CategoryName { get; set; }
+			public string ProductName { get; set; }
+			public decimal Price { get; set; }
+
+		}
+	}
 }
